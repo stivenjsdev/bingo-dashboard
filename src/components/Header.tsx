@@ -1,6 +1,6 @@
 import bingoLogo from "@/assets/logoadmin.svg";
 import { useGame } from "@/hooks/useGame";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   logoutButton?: boolean;
@@ -23,9 +23,17 @@ const Header = ({ logoutButton = false }: HeaderProps) => {
           <div className="flex items-center">
             <div className="flex items-center">
               <img className="w-11" src={bingoLogo} alt="logo Bingo" />
-              <span className="ml-2 text-white text-lg sm:text-xl font-semibold">
-                Bin<span className="text-purple-300">Go</span>! Dashboard
-              </span>
+              {logoutButton ? (
+                <Link to="/">
+                  <span className="ml-2 text-white text-lg sm:text-xl font-semibold">
+                    Bin<span className="text-purple-300">Go</span>!
+                  </span>
+                </Link>
+              ) : (
+                <span className="ml-2 text-white text-lg sm:text-xl font-semibold">
+                  Bin<span className="text-purple-300">Go</span>!
+                </span>
+              )}
             </div>
           </div>
           {logoutButton && (

@@ -1,5 +1,6 @@
 import AuthLayout from "@/layouts/AuthLayout";
 import Layout from "@/layouts/Layout";
+import GameDetailPage from "@/pages/GameDetailPage";
 import IndexPage from "@/pages/IndexPage";
 import LoginPage from "@/pages/LoginPage";
 import NewGamePage from "@/pages/NewGamePage";
@@ -12,7 +13,8 @@ function AppRouter() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<IndexPage />} index />
-          <Route path="/games/new" element={<NewGamePage />} />
+          <Route path="/game/new" element={<NewGamePage />} />
+          <Route path="/game/:id" element={<GameDetailPage />} />
         </Route>
 
         <Route element={<AuthLayout />}>

@@ -3,6 +3,7 @@ import active from "@/assets/active.svg";
 import calendar from "@/assets/calendar.svg";
 import game from "@/assets/game.svg";
 import inactive from "@/assets/inactive.svg";
+import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -10,8 +11,18 @@ const IndexPage = () => {
   const navigate = useNavigate();
 
   const handleAddNewGame = () => {
-    navigate("/games/new");
+    navigate("/game/new");
   };
+
+  const handleSelectGame = (gameId: string) => {
+    navigate(`/game/${gameId}`);
+  };
+
+  const {
+    data: user,
+    isError: isUserError,
+    isLoading: isUserLoading,
+  } = useAuth();
 
   const {
     data: games,
@@ -26,14 +37,17 @@ const IndexPage = () => {
 
   return (
     <>
-      {/* Header */}
-      <div className="w-full bg-indigo-600 p-4 sm:pt-1">
-        <p className="text-white text-xs">Hola Stiven Trujillo,</p>
-        {/* <h1 className="text-white text-2xl font-bold">Gestiona tus Juegos</h1> */}
-        <h1 className="text-white text-2xl font-bold">Juegos</h1>
-      </div>
       {/* Content */}
-      <div className="min-h-screen bg-gray-100 pb-16">
+      <div className="min-h-full bg-gray-100 pb-16">
+        {/* Header */}
+        <div className="w-full bg-indigo-600 p-4 sm:pt-1">
+          <p className="text-white text-xs">
+            Hola{" "}
+            {isUserLoading || isUserError ? "Administrador" : user?.username},
+          </p>
+          {/* <h1 className="text-white text-2xl font-bold">Gestiona tus Juegos</h1> */}
+          <h1 className="text-white text-2xl font-bold">Juegos</h1>
+        </div>
         {isLoading && (
           <div className="flex items-center justify-center h-64">
             <p className="text-gray-500">Cargando...</p>
@@ -44,6 +58,7 @@ const IndexPage = () => {
             <p className="text-red-500">Ha ocurrido un error</p>
           </div>
         )}
+        {/* Games List */}
         {games && (
           <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
             {/* <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
@@ -53,7 +68,11 @@ const IndexPage = () => {
               <div className="overflow-x-auto">
                 <ul className="divide-y divide-gray-200">
                   {games?.map((game) => (
-                    <li key={game._id} className="p-4 hover:bg-gray-50">
+                    <li
+                      key={game._id}
+                      className="p-4 hover:bg-gray-50"
+                      onClick={() => handleSelectGame(game._id)}
+                    >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                         <div className="mb-2 sm:mb-0">
                           <h2 className="text-lg font-medium text-gray-900">

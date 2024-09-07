@@ -38,3 +38,8 @@ export type NewGameForm = {
   gameName: string;
   date: Date;
 };
+
+export type NewPlayerForm = {
+  name: string;
+  wpNumber: string;
+};

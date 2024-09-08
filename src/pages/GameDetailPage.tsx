@@ -8,18 +8,20 @@ import { NewPlayerForm } from "@/types/index";
 import { capitalizeWords } from "@/utils/game";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const GameDetailPage = () => {
   const { id } = useParams();
 
-  
+  const navigate = useNavigate();
+
   const {
     state: {
       socket,
       selectedGame: game,
       isSelectedGameLoading: isLoading,
       isSelectedGameError: isError,
+      hasTokenExpired,
     },
     dispatch,
   } = useGame();
@@ -54,6 +56,17 @@ const GameDetailPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, id]);
+
+  useEffect(() => {
+    if (hasTokenExpired) {
+      console.log("token-expired");
+      dispatch({ type: "LOGOUT" });
+      navigate("/auth/login");
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasTokenExpired])
+  
 
   const handleCreatePlayer = (formData: NewPlayerForm) => {
     console.log("create-player", formData);
@@ -290,6 +303,18 @@ const GameDetailPage = () => {
                 />
                 Sacar Balotas
               </h3>
+              <button
+                onClick={handleTakeOutNumber}
+                disabled={!game.active || game.chosenNumbers.length === 75}
+                className={`mb-6 w-full px-4 py-2 rounded-md flex items-center justify-center ${
+                  game.active && game.chosenNumbers.length < 75
+                    ? "bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                {/* <CircleDotIcon className="h-5 w-5 mr-2" /> */}
+                Sacar Siguiente Balota
+              </button>
               <div className="grid grid-cols-5 gap-2">
                 {game.chosenNumbers.map((number) => (
                   <div
@@ -300,18 +325,6 @@ const GameDetailPage = () => {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={handleTakeOutNumber}
-                disabled={!game.active || game.chosenNumbers.length === 75}
-                className={`mt-6 w-full px-4 py-2 rounded-md flex items-center justify-center ${
-                  game.active && game.chosenNumbers.length < 75
-                    ? "bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                {/* <CircleDotIcon className="h-5 w-5 mr-2" /> */}
-                Sacar Siguiente Balota
-              </button>
             </div>
           </div>
         </div>

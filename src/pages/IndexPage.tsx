@@ -10,7 +10,7 @@ const IndexPage = () => {
   const navigate = useNavigate();
 
   const {
-    state: { user, socket, games, isGamesLoading, isGamesError },
+    state: { user, socket, games, isGamesLoading, isGamesError, hasTokenExpired },
     dispatch,
   } = useGame();
 
@@ -34,6 +34,16 @@ const IndexPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
+
+  useEffect(() => {
+    if (hasTokenExpired) {
+      console.log("token-expired");
+      dispatch({ type: "LOGOUT" });
+      navigate("/auth/login");
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasTokenExpired])
 
   return (
     <>

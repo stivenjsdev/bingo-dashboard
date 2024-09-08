@@ -26,6 +26,7 @@ const LoginForm = () => {
     },
     onSuccess: () => {
       reset();
+      console.log("Login Success: there is an error here");
       navigate("/");
     },
   });

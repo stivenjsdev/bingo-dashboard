@@ -36,6 +36,9 @@ export type GameActions =
   | {
       type: "SET_IS_SELECTED_GAME_ERROR";
       payload: { isSelectedGameError: boolean };
+    }
+  | {
+      type: "TOKEN_EXPIRED";
     };
 
 export type GameState = {
@@ -47,6 +50,7 @@ export type GameState = {
   isSelectedGameLoading: boolean;
   isSelectedGameError: boolean;
   socket: Socket;
+  hasTokenExpired: boolean;
 };
 
 export const initialState: GameState = {
@@ -78,6 +82,7 @@ export const initialState: GameState = {
   isSelectedGameLoading: false,
   isSelectedGameError: false,
   socket: null!,
+  hasTokenExpired: false,
 };
 
 export const gameReducer = (
@@ -134,6 +139,12 @@ export const gameReducer = (
   }
   if (action.type === "LOGOUT") {
     return initialState;
+  }
+  if (action.type === "TOKEN_EXPIRED") {
+    return {
+      ...state,
+      hasTokenExpired: true,
+    };
   }
 
   return state;

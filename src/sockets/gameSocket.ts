@@ -14,6 +14,10 @@ export const gameSocket = (
   // listen for game restarted event
   socket.on("game-restarted", (game: Game) => {
     console.log("game restarted", game._id);
+    if (!game) {
+      dispatch({ type: "TOKEN_EXPIRED" });
+      return;
+    }
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
     // todo: show an alert
   });
@@ -36,6 +40,9 @@ export const gameSocket = (
     if (!games) {
       console.error(message);
       dispatch({ type: "SET_IS_GAMES_ERROR", payload: { isGamesError: true } });
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      }
       return;
     }
     console.log(message);
@@ -45,7 +52,7 @@ export const gameSocket = (
 
   // listen for selected game event
   socket.on("game", (selectedGame: Game, message) => {
-    console.log("game", selectedGame);
+    console.log("game event");
     // validate errors
     dispatch({
       type: "SET_IS_SELECTED_GAME_LOADING",
@@ -57,6 +64,9 @@ export const gameSocket = (
         type: "SET_IS_SELECTED_GAME_ERROR",
         payload: { isSelectedGameError: true },
       });
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      }
       return;
     }
     console.log(message);
@@ -79,6 +89,9 @@ export const gameSocket = (
     console.log("player-created", message);
     if (!game) {
       console.error(message);
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      }
       return;
     }
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
@@ -90,7 +103,9 @@ export const gameSocket = (
     console.log("ball-takenOut", message);
     if (!game || !ball) {
       console.error(message);
-      // todo: set expired token 
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      }
       return;
     }
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });

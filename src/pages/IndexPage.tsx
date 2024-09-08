@@ -1,14 +1,18 @@
-import { getGames } from "@/api/AuthAPI";
 import active from "@/assets/active.svg";
 import calendar from "@/assets/calendar.svg";
 import game from "@/assets/game.svg";
 import inactive from "@/assets/inactive.svg";
-import { useAuth } from "@/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useGame } from "@/hooks/useGame";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const IndexPage = () => {
   const navigate = useNavigate();
+
+  const {
+    state: { user, socket, games, isGamesLoading, isGamesError },
+    dispatch,
+  } = useGame();
 
   const handleAddNewGame = () => {
     navigate("/game/new");
@@ -18,22 +22,18 @@ const IndexPage = () => {
     navigate(`/game/${gameId}`);
   };
 
-  const {
-    data: user,
-    isError: isUserError,
-    isLoading: isUserLoading,
-  } = useAuth();
-
-  const {
-    data: games,
-    isError,
-    isLoading,
-  } = useQuery({
-    queryKey: ["games"],
-    queryFn: getGames,
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
+  useEffect(() => {
+    if (socket) {
+      console.log("get-games");
+      dispatch({
+        type: "SET_IS_GAMES_LOADING",
+        payload: { isGamesLoading: true },
+      });
+      const token = localStorage.getItem("AUTH_TOKEN");
+      socket.emit("get-games", token);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
 
   return (
     <>
@@ -41,19 +41,16 @@ const IndexPage = () => {
       <div className="min-h-full bg-gray-100 pb-16">
         {/* Header */}
         <div className="w-full bg-indigo-600 p-4 sm:pt-1">
-          <p className="text-white text-xs">
-            Hola{" "}
-            {isUserLoading || isUserError ? "Administrador" : user?.username},
-          </p>
+          <p className="text-white text-xs">Hola {user?.username},</p>
           {/* <h1 className="text-white text-2xl font-bold">Gestiona tus Juegos</h1> */}
           <h1 className="text-white text-2xl font-bold">Juegos</h1>
         </div>
-        {isLoading && (
+        {isGamesLoading && (
           <div className="flex items-center justify-center h-64">
             <p className="text-gray-500">Cargando...</p>
           </div>
         )}
-        {isError && (
+        {isGamesError && (
           <div className="flex items-center justify-center h-64">
             <p className="text-red-500">Ha ocurrido un error</p>
           </div>

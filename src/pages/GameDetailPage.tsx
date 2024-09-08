@@ -1,4 +1,3 @@
-import { createPlayer, getGameById } from "@/api/AuthAPI";
 import calendar from "@/assets/calendar.svg";
 import key from "@/assets/key.svg";
 import start from "@/assets/start.svg";
@@ -7,33 +6,28 @@ import whatsapp from "@/assets/whatsapp.svg";
 import { useGame } from "@/hooks/useGame";
 import { NewPlayerForm } from "@/types/index";
 import { capitalizeWords } from "@/utils/game";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 const GameDetailPage = () => {
   const { id } = useParams();
 
+  
   const {
-    state: { socket },
+    state: {
+      socket,
+      selectedGame: game,
+      isSelectedGameLoading: isLoading,
+      isSelectedGameError: isError,
+    },
+    dispatch,
   } = useGame();
-
-  const {
-    data: game,
-    isError,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["game"],
-    queryFn: () => getGameById(id!),
-    retry: 1,
-    refetchOnWindowFocus: false,
-    enabled: !!id,
-  });
-
+  
   const [showAddPlayer, setShowAddPlayer] = useState(false);
-  const [requestError, setRequestError] = useState("");
+
+  // todo: change this to alerts
+  // const [requestError, setRequestError] = useState("");
 
   const {
     register,
@@ -42,38 +36,44 @@ const GameDetailPage = () => {
     reset,
   } = useForm<NewPlayerForm>();
 
-  const { mutate } = useMutation({
-    mutationFn: createPlayer,
-    onError: (error) => {
-      console.error("Error:", error);
-      setRequestError(error.message);
-    },
-    onSuccess: () => {
-      reset();
-      setShowAddPlayer(false);
-      refetch();
-    },
-  });
+  useEffect(() => {
+    if (socket) {
+      console.log("get-game");
+      dispatch({
+        type: "SET_IS_SELECTED_GAME_LOADING",
+        payload: { isSelectedGameLoading: true },
+      });
+      const token = localStorage.getItem("AUTH_TOKEN");
+      socket.emit("get-game", token, id);
+    }
+    
+    return () => {
+      if (socket) {
+        socket.emit("leaveRoom", id)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, id]);
 
-  const handleCreatePlayer = (formData: NewPlayerForm) =>
-    mutate({ ...formData, gameId: id! });
+  const handleCreatePlayer = (formData: NewPlayerForm) => {
+    console.log("create-player", formData);
+    const newPlayer = { ...formData, gameId: id };
+    const token = localStorage.getItem("AUTH_TOKEN");
+    socket.emit("create-player", token, newPlayer);
+    reset();
+    setShowAddPlayer(false);
+  };
 
   const handleTakeOutNumber = () => {
-    console.log("take out number");
-    socket.emit("takeOut ball", id);
-    // todo: no funciona
-    setTimeout(() => {
-      refetch();
-    }, 1000);
+    console.log("takeOut-ball");
+    const token = localStorage.getItem("AUTH_TOKEN");
+    socket.emit("takeOut-ball", token, id);
   };
-  
+
   const handleResetGame = () => {
-    console.log("reset game");
-    socket.emit("reset game", id);
-    // todo: no funciona
-    setTimeout(() => {
-      refetch();
-    }, 1000);
+    console.log("reset-game");
+    const token = localStorage.getItem("AUTH_TOKEN");
+    socket.emit("reset-game", token, id);
   };
 
   if (isLoading) {
@@ -157,7 +157,6 @@ const GameDetailPage = () => {
                   </span>
                   {game.winner ? (
                     <span className="text-sm font-bold text-gray-900">
-                      {/* todo: hacer el mongoose */}
                       {game.winner.name}
                     </span>
                   ) : (
@@ -178,7 +177,7 @@ const GameDetailPage = () => {
                   >
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-gray-900">
-                        {capitalizeWords(player.name)}
+                        {player.name && capitalizeWords(player.name)}
                       </span>
                       <span className="text-base text-gray-500 flex items-center mt-1">
                         <img
@@ -264,11 +263,6 @@ const GameDetailPage = () => {
                       {errors.wpNumber.message}
                     </div>
                   )}
-                  {requestError && (
-                    <div className="text-red-500 text-sm mt-2">
-                      {requestError}
-                    </div>
-                  )}
                   <div className="flex justify-end space-x-2">
                     <button
                       type="button"
@@ -308,9 +302,9 @@ const GameDetailPage = () => {
               </div>
               <button
                 onClick={handleTakeOutNumber}
-                disabled={!game.active}
+                disabled={!game.active || game.chosenNumbers.length === 75}
                 className={`mt-6 w-full px-4 py-2 rounded-md flex items-center justify-center ${
-                  game.active
+                  game.active && game.chosenNumbers.length < 75
                     ? "bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}

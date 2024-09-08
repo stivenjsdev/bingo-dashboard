@@ -19,8 +19,11 @@ const Layout = () => {
       // save socket connection to context
       dispatch({ type: "SET_SOCKET", payload: { socket } });
 
+      // save user data to context
+      dispatch({ type: "SET_USER", payload: { user: data } });
+
       // handle socket events
-      gameSocket(socket);
+      gameSocket(socket, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

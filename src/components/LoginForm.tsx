@@ -73,7 +73,6 @@ const LoginForm = () => {
               })}
             />
           </div>
-          {/* todo: password field */}
           <div>
             <label htmlFor="password"></label>
             <input

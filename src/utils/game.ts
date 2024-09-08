@@ -1,5 +1,4 @@
 export const dateFormatter = (date: Date) => {
-  console.log(date);
   return new Intl.DateTimeFormat("es-CO", {
     timeZone: "UTC", // Zona horaria de Colombia
     weekday: "long", // Día de la semana completo (ej. "lunes")

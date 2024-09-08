@@ -5,7 +5,7 @@ import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
 import { useGame } from "@/hooks/useGame";
 import { NewPlayerForm, Player } from "@/types/index";
-import { capitalizeWords } from "@/utils/game";
+import { capitalizeWords, dateFormatter } from "@/utils/game";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -142,7 +142,8 @@ const GameDetailPage = () => {
                   src={calendar}
                   alt="calendar icon"
                 />
-                {game.date.toString().split("T")[0]}
+                {/* {game.date.toString().split("T")[0]} */}
+                {dateFormatter(new Date(game.date))}
               </p>
             </div>
             <div className="px-4 py-5 sm:p-6">

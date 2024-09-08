@@ -1,5 +1,5 @@
+import { Game, User } from "@/types";
 import { Socket } from "socket.io-client";
-import { Game, User } from "../types";
 
 export type GameActions =
   | {

@@ -1,5 +1,5 @@
 import { createGame } from "@/api/AuthAPI";
-import type { NewGameForm } from "@/types/index";
+import type { NewGameForm } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

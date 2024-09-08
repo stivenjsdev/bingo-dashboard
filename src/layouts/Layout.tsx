@@ -1,10 +1,10 @@
+import Header from "@/components/Header";
 import { useAuth } from "@/hooks/useAuth";
 import { useGame } from "@/hooks/useGame";
 import { gameSocket } from "@/sockets/gameSocket";
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { io } from "socket.io-client";
-import Header from "../components/Header";
 
 const Layout = () => {
   const { dispatch } = useGame();

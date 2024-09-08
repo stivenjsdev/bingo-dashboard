@@ -5,6 +5,7 @@ import inactive from "@/assets/inactive.svg";
 import { useGame } from "@/hooks/useGame";
 import { MouseEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const IndexPage = () => {
   const navigate = useNavigate();
@@ -37,6 +38,17 @@ const IndexPage = () => {
     const token = localStorage.getItem("AUTH_TOKEN");
     socket.emit("delete-game", token, gameId);
   };
+
+  useEffect(() => {
+    if (isGamesError) {
+      Swal.fire({
+        title: "Error!",
+        text: "Ha ocurrido un error al cargar los juegos, por favor recargue la página",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+    }
+  }, [isGamesError]);
 
   useEffect(() => {
     if (socket) {
@@ -76,11 +88,11 @@ const IndexPage = () => {
             <p className="text-gray-500">Cargando...</p>
           </div>
         )}
-        {isGamesError && (
+        {/* {isGamesError && (
           <div className="flex items-center justify-center h-64">
             <p className="text-red-500">Ha ocurrido un error</p>
           </div>
-        )}
+        )} */}
         {/* Games List */}
         {games && (
           <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">

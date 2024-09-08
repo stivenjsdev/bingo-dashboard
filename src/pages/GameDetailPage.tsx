@@ -9,6 +9,7 @@ import { capitalizeWords } from "@/utils/game";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const GameDetailPage = () => {
   const { id } = useParams();
@@ -27,9 +28,6 @@ const GameDetailPage = () => {
   } = useGame();
   
   const [showAddPlayer, setShowAddPlayer] = useState(false);
-
-  // todo: change this to alerts
-  // const [requestError, setRequestError] = useState("");
 
   const {
     register,
@@ -104,11 +102,12 @@ const GameDetailPage = () => {
   }
 
   if (isError) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-red-500">Ha ocurrido un error</p>
-      </div>
-    );
+    Swal.fire({
+      title: "Error!",
+      text: "Error al cargar el juego, por favor vuelva a la página de inicio",
+      icon: "error",
+      confirmButtonText: "Ok",
+    });
   }
 
   if (game) {

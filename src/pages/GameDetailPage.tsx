@@ -344,7 +344,7 @@ const GameDetailPage = () => {
                     key={number}
                     className="bg-indigo-100 text-indigo-800 text-sm font-medium px-2.5 py-0.5 rounded-full text-center"
                   >
-                    {getBingoLetter(number)}{" "}{number}
+                    {getBingoLetter(number).toUpperCase()}{" "}{number}
                   </div>
                 ))}
               </div>

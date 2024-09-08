@@ -4,7 +4,7 @@ import start from "@/assets/start.svg";
 import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
 import { useGame } from "@/hooks/useGame";
-import { NewPlayerForm } from "@/types/index";
+import { NewPlayerForm, Player } from "@/types/index";
 import { capitalizeWords } from "@/utils/game";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,7 +26,7 @@ const GameDetailPage = () => {
     },
     dispatch,
   } = useGame();
-  
+
   const [showAddPlayer, setShowAddPlayer] = useState(false);
 
   const {
@@ -46,12 +46,12 @@ const GameDetailPage = () => {
       const token = localStorage.getItem("AUTH_TOKEN");
       socket.emit("get-game", token, id);
     }
-    
+
     return () => {
       if (socket) {
-        socket.emit("leaveRoom", id)
+        socket.emit("leaveRoom", id);
       }
-    }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, id]);
 
@@ -62,9 +62,8 @@ const GameDetailPage = () => {
       navigate("/auth/login");
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasTokenExpired])
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasTokenExpired]);
 
   const handleCreatePlayer = (formData: NewPlayerForm) => {
     console.log("create-player", formData);
@@ -91,7 +90,16 @@ const GameDetailPage = () => {
     console.log("delete-player");
     const token = localStorage.getItem("AUTH_TOKEN");
     socket.emit("delete-player", token, playerId, id);
-  }
+  };
+
+  const handleSendPlayer = (player: Player) => {
+    console.log("send-player");
+    const message = `Hola ${capitalizeWords(player.name)}, tu código para el juego es: ${player.code}. Puedes ingresar al juego en: https://bingost.netlify.app`;
+    // todo: add code in url automatically
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/57${player.wpNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
 
   if (isLoading) {
     return (
@@ -215,12 +223,21 @@ const GameDetailPage = () => {
                       </span>
                     </div>
                     {!game.winner && (
-                      <button
-                        onClick={() => handleDeletePlayer(player._id)}
-                        className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200"
-                      >
-                        Eliminar
-                      </button>
+                      <div className="flex flex-col gap-2 py-2">
+                        <button
+                          onClick={() => handleDeletePlayer(player._id)}
+                          className="px-3 py-1 bg-red-100 text-red-800 rounded-md text-sm font-medium hover:bg-red-200"
+                        >
+                          Eliminar
+                        </button>
+
+                        <button
+                          onClick={() => handleSendPlayer(player)}
+                          className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200"
+                        >
+                          Enviar
+                        </button>
+                      </div>
                     )}
                   </li>
                 ))}

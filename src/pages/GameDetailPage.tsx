@@ -5,7 +5,7 @@ import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
 import { useGame } from "@/hooks/useGame";
 import { NewPlayerForm, Player } from "@/types/index";
-import { capitalizeWords, dateFormatter } from "@/utils/game";
+import { capitalizeWords, dateFormatter, getBingoLetter } from "@/utils/game";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -344,7 +344,7 @@ const GameDetailPage = () => {
                     key={number}
                     className="bg-indigo-100 text-indigo-800 text-sm font-medium px-2.5 py-0.5 rounded-full text-center"
                   >
-                    {number}
+                    {getBingoLetter(number)}{" "}{number}
                   </div>
                 ))}
               </div>

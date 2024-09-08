@@ -128,4 +128,18 @@ export const gameSocket = (
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
     // show an alert when an error happens
   });
+
+  // listen for game deleted event
+  socket.on("game-deleted", (games, message) => {
+    console.log("game-deleted", message);
+    if (!games) {
+      console.error(message);
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      }
+      return;
+    }
+    dispatch({ type: "SET_GAMES", payload: { games } });
+    // show an alert when an error happens
+  });
 };

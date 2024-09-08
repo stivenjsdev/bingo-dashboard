@@ -3,14 +3,21 @@ import calendar from "@/assets/calendar.svg";
 import game from "@/assets/game.svg";
 import inactive from "@/assets/inactive.svg";
 import { useGame } from "@/hooks/useGame";
-import { useEffect } from "react";
+import { MouseEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const IndexPage = () => {
   const navigate = useNavigate();
 
   const {
-    state: { user, socket, games, isGamesLoading, isGamesError, hasTokenExpired },
+    state: {
+      user,
+      socket,
+      games,
+      isGamesLoading,
+      isGamesError,
+      hasTokenExpired,
+    },
     dispatch,
   } = useGame();
 
@@ -20,6 +27,15 @@ const IndexPage = () => {
 
   const handleSelectGame = (gameId: string) => {
     navigate(`/game/${gameId}`);
+  };
+
+  const handleDeleteGame = (
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+    gameId: string
+  ) => {
+    event.stopPropagation();
+    const token = localStorage.getItem("AUTH_TOKEN");
+    socket.emit("delete-game", token, gameId);
   };
 
   useEffect(() => {
@@ -42,8 +58,8 @@ const IndexPage = () => {
       navigate("/auth/login");
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasTokenExpired])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasTokenExpired]);
 
   return (
     <>
@@ -80,43 +96,55 @@ const IndexPage = () => {
                       className="p-4 hover:bg-gray-50"
                       onClick={() => handleSelectGame(game._id)}
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-                        <div className="mb-2 sm:mb-0">
-                          <h2 className="text-lg font-medium text-gray-900">
-                            {game.gameName}
-                          </h2>
-                          <p className="text-sm text-gray-500 flex items-center mt-1">
-                            <img
-                              src={calendar}
-                              alt="calendar"
-                              className="h-4 w-4 mr-1"
-                            />
-                            {game.date.toString().split("T")[0]}
-                          </p>
+                      <div className="flex justify-between">
+                        <div className="flex flex-col justify-between sm:gap-2">
+                          <div className="mb-2 sm:mb-0">
+                            <h2 className="text-lg font-medium text-gray-900">
+                              {game.gameName}
+                            </h2>
+                            <p className="text-sm text-gray-500 flex items-center mt-1">
+                              <img
+                                src={calendar}
+                                alt="calendar"
+                                className="h-4 w-4 mr-1"
+                              />
+                              {game.date.toString().split("T")[0]}
+                            </p>
+                          </div>
+                          <div className="flex items-center">
+                            <span
+                              className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                game.active
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
+                            >
+                              {game.active ? (
+                                <img
+                                  src={active}
+                                  alt="active icon"
+                                  className="h-4 w-4 mr-1"
+                                />
+                              ) : (
+                                <img
+                                  src={inactive}
+                                  alt="inactive icon"
+                                  className="h-4 w-4 mr-1"
+                                />
+                              )}
+                              {game.active ? "Active" : "Inactive"}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center">
-                          <span
-                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              game.active
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
+                        <div className="flex items-center justify-center">
+                          <button
+                            className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200"
+                            onClick={(event) =>
+                              handleDeleteGame(event, game._id)
+                            }
                           >
-                            {game.active ? (
-                              <img
-                                src={active}
-                                alt="active icon"
-                                className="h-4 w-4 mr-1"
-                              />
-                            ) : (
-                              <img
-                                src={inactive}
-                                alt="inactive icon"
-                                className="h-4 w-4 mr-1"
-                              />
-                            )}
-                            {game.active ? "Active" : "Inactive"}
-                          </span>
+                            Eliminar
+                          </button>
                         </div>
                       </div>
                     </li>

@@ -89,6 +89,12 @@ const GameDetailPage = () => {
     socket.emit("reset-game", token, id);
   };
 
+  const handleDeletePlayer = (playerId: string) => {
+    console.log("delete-player");
+    const token = localStorage.getItem("AUTH_TOKEN");
+    socket.emit("delete-player", token, playerId, id);
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -211,10 +217,10 @@ const GameDetailPage = () => {
                     </div>
                     {!game.winner && (
                       <button
-                        onClick={() => console.log("onSetWinner(player.name)")}
+                        onClick={() => handleDeletePlayer(player._id)}
                         className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200"
                       >
-                        Enviar
+                        Eliminar
                       </button>
                     )}
                   </li>

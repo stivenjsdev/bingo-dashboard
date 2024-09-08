@@ -114,4 +114,18 @@ export const gameSocket = (
 
   // listen for a channel message
   // todo: implement this
+
+  // listen for played deleted event
+  socket.on("player-deleted", (game, message) => {
+    console.log("player-deleted", message);
+    if (!game) {
+      console.error(message);
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      }
+      return;
+    }
+    dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
+    // show an alert when an error happens
+  });
 };

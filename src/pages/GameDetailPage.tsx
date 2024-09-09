@@ -94,7 +94,7 @@ const GameDetailPage = () => {
 
   const handleSendPlayer = (player: Player) => {
     console.log("send-player");
-    const message = `Hola ${capitalizeWords(player.name)}, tu código para el juego es: ${player.code}. Puedes ingresar al juego en: https://bingost.netlify.app`;
+    const message = `Hola ${capitalizeWords(player.name)}, tu código para el juego es: ${player.code}. Puedes ingresar al juego en: https://bingost.netlify.app/auth/login/${player.code}`;
     // todo: add code in url automatically
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/57${player.wpNumber}?text=${encodedMessage}`;

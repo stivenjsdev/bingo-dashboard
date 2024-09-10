@@ -184,7 +184,7 @@ const GameDetailPage = () => {
                   </span>
                   {game.winner ? (
                     <span className="text-sm font-bold text-gray-900">
-                      {game.winner.name}
+                      {capitalizeWords(game.winner.name)}
                     </span>
                   ) : (
                     <span className="text-sm text-gray-500">

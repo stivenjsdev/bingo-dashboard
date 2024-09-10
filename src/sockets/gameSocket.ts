@@ -1,5 +1,5 @@
 import { GameActions } from "@/reducers/gameReducer";
-import type { Game } from "@/types/index";
+import type { Game, Player } from "@/types/index";
 import { capitalizeWords } from "@/utils/game";
 import { Socket } from "socket.io-client";
 import Swal, { SweetAlertIcon } from "sweetalert2";
@@ -204,6 +204,32 @@ export const gameSocket = (
       icon: icon,
       showConfirmButton: false,
       timer: 3300,
+    });
+  });
+
+  // listen for card changed event
+  socket.on("card-changed", (game: Game, player: Player, message: string) => {
+    console.log("card-changed", game._id);
+    if (!game) {
+      console.error(message);
+      if (message.includes("Unauthorized")) {
+        dispatch({ type: "TOKEN_EXPIRED" });
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: "Error al cambiar el carton, por favor recargue la página",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      }
+      return;
+    }
+    dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
+    Swal.fire({
+      title: "Cartón Cambiado!",
+      text: `El cartón de ${player.name} ha sido cambiado exitosamente`,
+      icon: "success",
+      confirmButtonText: "Ok",
     });
   });
 

@@ -1,6 +1,7 @@
 import calendar from "@/assets/calendar.svg";
 import key from "@/assets/key.svg";
 import logoAdmin from "@/assets/logoadmin.svg";
+import change from "@/assets/reload.svg";
 import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
 import { useGame } from "@/hooks/useGame";
@@ -94,12 +95,24 @@ const GameDetailPage = () => {
 
   const handleSendPlayer = (player: Player) => {
     console.log("send-player");
-    const message = `Hola ${capitalizeWords(player.name)}, tu código para el juego es: ${player.code}. Puedes ingresar al juego en: https://bingost.netlify.app/auth/login/${player.code}`;
+    const message = `Hola ${capitalizeWords(
+      player.name
+    )}, tu código para el juego es: ${
+      player.code
+    }. Puedes ingresar al juego en: https://bingost.netlify.app/auth/login/${
+      player.code
+    }`;
     // todo: add code in url automatically
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/57${player.wpNumber}?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank");
+    const WhatsAppUrl = `https://wa.me/57${player.wpNumber}?text=${encodedMessage}`;
+    window.open(WhatsAppUrl, "_blank");
   };
+
+  const handleChangeCard = (playerId: string) => {
+    console.log("change-card");
+    const token = localStorage.getItem("AUTH_TOKEN");
+    socket.emit("change-card", token, playerId, id);
+  }
 
   if (isLoading) {
     return (
@@ -202,7 +215,7 @@ const GameDetailPage = () => {
                     key={player._id}
                     className="py-4 flex items-center justify-between"
                   >
-                    <div className="flex flex-col">
+                    <div className="flex flex-col min-w-28">
                       <span className="text-sm font-medium text-gray-900">
                         {player.name && capitalizeWords(player.name)}
                       </span>
@@ -224,21 +237,35 @@ const GameDetailPage = () => {
                       </span>
                     </div>
                     {!game.winner && (
-                      <div className="flex flex-col gap-2 py-2">
-                        <button
-                          onClick={() => handleDeletePlayer(player._id)}
-                          className="px-3 py-1 bg-red-100 text-red-800 rounded-md text-sm font-medium hover:bg-red-200"
-                        >
-                          Eliminar
-                        </button>
+                      <>
+                        <div>
+                          <button
+                            className="transform active:scale-90 transition duration-150"
+                            onClick={() => handleChangeCard(player._id)}
+                          >
+                            <img
+                              src={change}
+                              alt="change icon"
+                              className="w-10"
+                            />
+                          </button>
+                        </div>
+                        <div className="flex flex-col gap-2 py-2">
+                          <button
+                            onClick={() => handleDeletePlayer(player._id)}
+                            className="px-3 py-1 bg-red-100 text-red-800 rounded-md text-sm font-medium hover:bg-red-200"
+                          >
+                            Eliminar
+                          </button>
 
-                        <button
-                          onClick={() => handleSendPlayer(player)}
-                          className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200"
-                        >
-                          Enviar
-                        </button>
-                      </div>
+                          <button
+                            onClick={() => handleSendPlayer(player)}
+                            className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200"
+                          >
+                            Enviar
+                          </button>
+                        </div>
+                      </>
                     )}
                   </li>
                 ))}
@@ -327,9 +354,7 @@ const GameDetailPage = () => {
                   />
                   Balotas
                 </h3>
-                <h4 className="text-sm">
-                  {game.chosenNumbers.length} de 75
-                </h4>
+                <h4 className="text-sm">{game.chosenNumbers.length} de 75</h4>
               </div>
               <button
                 onClick={handleTakeOutNumber}
@@ -349,7 +374,7 @@ const GameDetailPage = () => {
                     key={number}
                     className="bg-indigo-100 text-indigo-800 text-sm font-medium px-2.5 py-0.5 rounded-full text-center"
                   >
-                    {getBingoLetter(number).toUpperCase()}{" "}{number}
+                    {getBingoLetter(number).toUpperCase()} {number}
                   </div>
                 ))}
               </div>

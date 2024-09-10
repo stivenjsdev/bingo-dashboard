@@ -163,7 +163,7 @@ const GameDetailPage = () => {
                 </button> */}
                 <button
                   onClick={handleResetGame}
-                  className={`px-3 py-1 rounded-md text-xs font-medium ${
+                  className={`px-3 py-1 rounded-md text-xs font-medium transform active:scale-90 transition duration-150 ${
                     game.active
                       ? "bg-red-100 text-red-800 hover:bg-red-200"
                       : "bg-green-100 text-green-800 hover:bg-green-200"
@@ -334,7 +334,7 @@ const GameDetailPage = () => {
               <button
                 onClick={handleTakeOutNumber}
                 disabled={!game.active || game.chosenNumbers.length === 75}
-                className={`mb-6 w-full px-4 py-2 rounded-md flex items-center justify-center ${
+                className={`mb-6 w-full px-4 py-2 rounded-md flex items-center justify-center transform active:scale-90 transition duration-150 ${
                   game.active && game.chosenNumbers.length < 75
                     ? "bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"

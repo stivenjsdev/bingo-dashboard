@@ -1,6 +1,6 @@
 import calendar from "@/assets/calendar.svg";
 import key from "@/assets/key.svg";
-import start from "@/assets/start.svg";
+import logoAdmin from "@/assets/logoadmin.svg";
 import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
 import { useGame } from "@/hooks/useGame";
@@ -318,14 +318,19 @@ const GameDetailPage = () => {
               )}
             </div>
             <div className="px-4 py-5 sm:p-6 border-t border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                <img
-                  className="w-6 h-6 mr-2 inline-block"
-                  src={start}
-                  alt="start icon"
-                />
-                Sacar Balotas
-              </h3>
+              <div className="flex flex-row justify-between">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  <img
+                    className="w-6 h-6 mr-2 inline-block"
+                    src={logoAdmin}
+                    alt="start icon"
+                  />
+                  Balotas
+                </h3>
+                <h4 className="text-sm">
+                  {game.chosenNumbers.length} de 75
+                </h4>
+              </div>
               <button
                 onClick={handleTakeOutNumber}
                 disabled={!game.active || game.chosenNumbers.length === 75}

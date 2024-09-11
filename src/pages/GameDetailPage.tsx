@@ -112,7 +112,7 @@ const GameDetailPage = () => {
     console.log("change-card");
     const token = localStorage.getItem("AUTH_TOKEN");
     socket.emit("change-card", token, playerId, id);
-  }
+  };
 
   if (isLoading) {
     return (
@@ -216,8 +216,11 @@ const GameDetailPage = () => {
                     className="py-4 flex items-center justify-between"
                   >
                     <div className="flex flex-col min-w-28">
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 flex flex-row items-center">
                         {player.name && capitalizeWords(player.name)}
+                        {player.online && (
+                          <span className="rounded-full w-2  h-2 aspect-square bg-green-500 ml-1"></span>
+                        )}
                       </span>
                       <span className="text-base text-gray-500 flex items-center mt-1">
                         <img

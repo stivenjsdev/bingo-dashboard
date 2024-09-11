@@ -1,16 +1,36 @@
 import { GameActions } from "@/reducers/gameReducer";
-import type { Game, Player } from "@/types/index";
+import type { Game, Player, User } from "@/types/index";
 import { capitalizeWords } from "@/utils/game";
 import { Socket } from "socket.io-client";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
 export const gameSocket = (
+  user: User,
   socket: Socket,
   dispatch: React.Dispatch<GameActions>
 ) => {
   // connect to socket
   socket.on("connect", () => {
     console.log("connected");
+  });
+
+  // listen for join game event
+  socket.on("player-joined-game", (game: Game) => {
+    console.log("joined-game", game.gameName);
+    if (!game) {
+      console.error('joined-game Error joining game');
+      // todo: maybe logout user
+      return
+    }
+    dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
+    // show an alert when an error happens
+  });
+
+  // listen for disconnect event
+  socket.on("player-disconnected", (game: Game) => {
+    console.log("player-disconnected", game);
+    if (!game) return;
+    dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
   });
 
   // listen for game restarted event
@@ -72,7 +92,7 @@ export const gameSocket = (
   });
 
   // listen for selected game event
-  socket.on("game", (selectedGame: Game, message) => {
+  socket.on("game", (selectedGame: Game, message: string) => {
     console.log("game event");
     // validate errors
     dispatch({
@@ -103,14 +123,11 @@ export const gameSocket = (
       payload: { isSelectedGameError: false },
     });
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame } });
+    // note: we don't send the third parameter to identify us as the host
     socket.emit("join-game", selectedGame._id);
   });
 
-  // listen for join game event
-  socket.on("joined-game", (game: Game) => {
-    console.log("joined-game", game._id);
-    // show an alert when an error happens
-  });
+  
 
   // listen for player created event
   socket.on("player-created", (game, message) => {
@@ -130,7 +147,6 @@ export const gameSocket = (
       return;
     }
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
-    // show an alert when an error happens
   });
 
   // listen for number chosen event
@@ -151,7 +167,6 @@ export const gameSocket = (
       return;
     }
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
-    // show an alert when an error happens or there are no more balls
   });
 
   // listen for played deleted event
@@ -172,7 +187,12 @@ export const gameSocket = (
       return;
     }
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
-    // show an alert when an error happens
+    Swal.fire({
+      title: "Jugador Eliminado!",
+      text: "El jugador ha sido eliminado exitosamente",
+      icon: "success",
+      confirmButtonText: "Ok",
+    });
   });
 
   // listen for game deleted event
@@ -193,7 +213,6 @@ export const gameSocket = (
       return;
     }
     dispatch({ type: "SET_GAMES", payload: { games } });
-    // show an alert when an error happens
   });
 
   // listen for message event

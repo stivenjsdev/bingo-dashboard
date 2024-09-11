@@ -7,6 +7,8 @@ export const useAuth = () => {
     queryFn: getUser,
     retry: 1,
     refetchOnWindowFocus: false,
+    gcTime: 0,
+    staleTime: 0,
   });
 
   return { data, isError, isLoading };

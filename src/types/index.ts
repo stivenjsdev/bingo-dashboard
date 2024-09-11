@@ -12,6 +12,8 @@ export type Player = {
   bingoCard: number[][];
   game: Game;
   active: boolean;
+  online: boolean;
+  socketId: string | null;
   createdAt: Date;
   updatedAt: Date;
 };

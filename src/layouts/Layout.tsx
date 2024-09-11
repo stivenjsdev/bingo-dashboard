@@ -23,7 +23,7 @@ const Layout = () => {
       dispatch({ type: "SET_USER", payload: { user: data } });
 
       // handle socket events
-      gameSocket(socket, dispatch);
+      gameSocket(data, socket, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

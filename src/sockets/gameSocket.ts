@@ -12,6 +12,7 @@ export const gameSocket = (
   // connect to socket
   socket.on("connect", () => {
     console.log("connected");
+    console.log(user.username);
   });
 
   // listen for join game event

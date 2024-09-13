@@ -18,7 +18,7 @@ const Header = ({ logoutButton = false }: HeaderProps) => {
 
   return (
     <header className="max-h-20 bg-indigo-600 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2 sm:py-4">
           <div className="flex items-center">
             <div className="flex items-center">

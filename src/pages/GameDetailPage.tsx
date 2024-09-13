@@ -4,6 +4,7 @@ import logoAdmin from "@/assets/logoadmin.svg";
 import change from "@/assets/reload.svg";
 import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
+import TakeOutButton from "@/components/TakeOutButton";
 import { useGame } from "@/hooks/useGame";
 import { NewPlayerForm, Player } from "@/types/index";
 import { capitalizeWords, dateFormatter, getBingoLetter } from "@/utils/game";
@@ -347,9 +348,9 @@ const GameDetailPage = () => {
                 </form>
               )}
             </div>
-            <div className="px-4 py-5 sm:p-6 border-t border-gray-200">
+            <div className="flex flex-col gap-4 px-4 py-5 sm:p-6 border-t border-gray-200">
               <div className="flex flex-row justify-between">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                <h3 className="text-lg font-medium text-gray-900">
                   <img
                     className="w-6 h-6 mr-2 inline-block"
                     src={logoAdmin}
@@ -359,7 +360,7 @@ const GameDetailPage = () => {
                 </h3>
                 <h4 className="text-sm">{game.chosenNumbers.length} de 75</h4>
               </div>
-              <button
+              {/* <button
                 onClick={handleTakeOutNumber}
                 disabled={!game.active || game.chosenNumbers.length === 75}
                 className={`mb-6 w-full px-4 py-2 rounded-md flex items-center justify-center transform active:scale-90 transition duration-150 ${
@@ -368,9 +369,12 @@ const GameDetailPage = () => {
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
-                {/* <CircleDotIcon className="h-5 w-5 mr-2" /> */}
                 Sacar Siguiente Balota
-              </button>
+              </button> */}
+              <TakeOutButton
+                noActive={!game.active || game.chosenNumbers.length === 75}
+                handleOnClick={handleTakeOutNumber}
+              />
               <div className="grid grid-cols-5 gap-2">
                 {game.chosenNumbers.map((number) => (
                   <div

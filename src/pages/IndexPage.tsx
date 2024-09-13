@@ -78,10 +78,14 @@ const IndexPage = () => {
       {/* Content */}
       <div className="min-h-full bg-gray-100 pb-16">
         {/* Header */}
-        <div className="w-full bg-indigo-600 p-4 sm:pt-1">
-          <p className="text-white text-xs">Hola {user?.username},</p>
-          {/* <h1 className="text-white text-2xl font-bold">Gestiona tus Juegos</h1> */}
-          <h1 className="text-white text-2xl font-bold">Juegos</h1>
+        <div className="w-full bg-indigo-600 sm:pt-1">
+          <div className="max-w-4xl mx-auto p-4 sm:px-6 lg:px-8">
+            <p className="text-white text-xs">Hola {user?.username},</p>
+            <h1 className="text-white text-2xl font-bold">
+              Gestiona tus Juegos
+            </h1>
+            {/* <h1 className="text-white text-2xl font-bold">Juegos</h1> */}
+          </div>
         </div>
         {isGamesLoading && (
           <div className="flex items-center justify-center h-64">
@@ -167,8 +171,8 @@ const IndexPage = () => {
           </div>
         )}
         {/* Add new game button */}
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-100 shadow-lg p-4">
-          <div className="max-w-4xl mx-auto">
+        <div className="fixed bottom-0 left-0 right-0 bg-transparent shadow-lg p-4">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <button
               onClick={handleAddNewGame}
               className="w-full px-4 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"

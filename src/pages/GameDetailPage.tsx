@@ -104,7 +104,7 @@ const GameDetailPage = () => {
     }`;
     // todo: add code in url automatically
     const encodedMessage = encodeURIComponent(message);
-    const WhatsAppUrl = `https://wa.me/57${player.wpNumber}?text=${encodedMessage}`;
+    const WhatsAppUrl = `https://wa.me/${player.wpNumber}?text=${encodedMessage}`;
     window.open(WhatsAppUrl, "_blank");
   };
 

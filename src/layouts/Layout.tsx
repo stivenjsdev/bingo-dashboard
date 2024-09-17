@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import { useGame } from "@/hooks/useGame";
 import { gameSocket } from "@/sockets/gameSocket";
@@ -28,7 +29,13 @@ const Layout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  if (isLoading) return "Cargando...";
+  if (isLoading)
+    return (
+      <div className="w-full h-screen flex flex-col items-center justify-center">
+        <p className="text-gray-500">Cargando...</p>
+        <LoadingSpinner />
+      </div>
+    );
   if (isError) {
     return <Navigate to="/auth/login" />;
   }

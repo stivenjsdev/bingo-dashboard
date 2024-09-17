@@ -2,6 +2,7 @@ import active from "@/assets/active.svg";
 import calendar from "@/assets/calendar.svg";
 import game from "@/assets/game.svg";
 import inactive from "@/assets/inactive.svg";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useGame } from "@/hooks/useGame";
 import { MouseEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -86,8 +87,9 @@ const IndexPage = () => {
           </div>
         </div>
         {isGamesLoading && (
-          <div className="flex items-center justify-center h-64">
+          <div className="flex flex-col items-center justify-center h-64">
             <p className="text-gray-500">Cargando...</p>
+            <LoadingSpinner />
           </div>
         )}
         {/* {isGamesError && (

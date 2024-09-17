@@ -4,6 +4,7 @@ import logoAdmin from "@/assets/logoadmin.svg";
 import change from "@/assets/reload.svg";
 import trophy from "@/assets/trophy.svg";
 import whatsapp from "@/assets/whatsapp.svg";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import TakeOutButton from "@/components/TakeOutButton";
 import { useGame } from "@/hooks/useGame";
 import { NewPlayerForm, Player } from "@/types/index";
@@ -114,8 +115,9 @@ const GameDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex flex-col items-center justify-center h-64">
         <p className="text-gray-500">Cargando...</p>
+        <LoadingSpinner />
       </div>
     );
   }

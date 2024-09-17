@@ -205,7 +205,7 @@ const GameDetailPage = () => {
                 </div>
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Jugadores
+                Jugadores: <span className="text-base text-gray-700">{game.players.length}</span>
               </h3>
               <ul className="divide-y divide-gray-200">
                 {game.players.map((player) => (

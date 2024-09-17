@@ -45,8 +45,12 @@ const GameDetailPage = () => {
         type: "SET_IS_SELECTED_GAME_LOADING",
         payload: { isSelectedGameLoading: true },
       });
-      const token = localStorage.getItem("AUTH_TOKEN");
-      socket.emit("get-game", token, id);
+      // const token = localStorage.getItem("AUTH_TOKEN");
+      // socket.emit("get-game", token, id);
+      socket.emit("getGame", id);
+      socket.on("connect", () => {
+        socket.emit("joinGame", id);
+      });
     }
 
     return () => {
@@ -68,30 +72,34 @@ const GameDetailPage = () => {
   }, [hasTokenExpired]);
 
   const handleCreatePlayer = (formData: NewPlayerForm) => {
-    console.log("create-player", formData);
+    console.log("createPlayer", formData);
     const newPlayer = { ...formData, gameId: id };
-    const token = localStorage.getItem("AUTH_TOKEN");
-    socket.emit("create-player", token, newPlayer);
+    // const token = localStorage.getItem("AUTH_TOKEN");
+    // socket.emit("createPlayer", token, newPlayer);
+    socket.emit("createPlayer", newPlayer);
     reset();
     setShowAddPlayer(false);
   };
 
   const handleTakeOutNumber = () => {
-    console.log("takeOut-ball");
-    const token = localStorage.getItem("AUTH_TOKEN");
-    socket.emit("takeOut-ball", token, id);
+    console.log("takeBallOut");
+    // const token = localStorage.getItem("AUTH_TOKEN");
+    // socket.emit("takeBallOut", token, id);
+    socket.emit("takeBallOut", id);
   };
 
   const handleResetGame = () => {
-    console.log("reset-game");
-    const token = localStorage.getItem("AUTH_TOKEN");
-    socket.emit("reset-game", token, id);
+    console.log("resetGame");
+    // const token = localStorage.getItem("AUTH_TOKEN");
+    // socket.emit("resetGame", token, id);
+    socket.emit("resetGame", id);
   };
 
   const handleDeletePlayer = (playerId: string) => {
     console.log("delete-player");
-    const token = localStorage.getItem("AUTH_TOKEN");
-    socket.emit("delete-player", token, playerId, id);
+    // const token = localStorage.getItem("AUTH_TOKEN");
+    // socket.emit("deletePlayer", token, playerId, id);
+    socket.emit("deletePlayer", playerId, id);
   };
 
   const handleSendPlayer = (player: Player) => {
@@ -110,9 +118,10 @@ const GameDetailPage = () => {
   };
 
   const handleChangeCard = (playerId: string) => {
-    console.log("change-card");
-    const token = localStorage.getItem("AUTH_TOKEN");
-    socket.emit("change-card", token, playerId, id);
+    console.log("changeCard");
+    // const token = localStorage.getItem("AUTH_TOKEN");
+    // socket.emit("changeCard", token, playerId, id);
+    socket.emit("changeCard", playerId, id);
   };
 
   if (isLoading) {

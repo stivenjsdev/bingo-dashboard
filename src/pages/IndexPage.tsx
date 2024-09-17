@@ -35,8 +35,9 @@ const IndexPage = () => {
     gameId: string
   ) => {
     event.stopPropagation();
-    const token = localStorage.getItem("AUTH_TOKEN");
-    socket.emit("delete-game", token, gameId);
+    // const token = localStorage.getItem("AUTH_TOKEN");
+    // socket.emit("deleteGame", token, gameId);
+    socket.emit("deleteGame", gameId);
   };
 
   useEffect(() => {
@@ -52,13 +53,14 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (socket) {
-      console.log("get-games");
+      console.log("getGames");
       dispatch({
         type: "SET_IS_GAMES_LOADING",
         payload: { isGamesLoading: true },
       });
-      const token = localStorage.getItem("AUTH_TOKEN");
-      socket.emit("get-games", token);
+      // const token = localStorage.getItem("AUTH_TOKEN");
+      // socket.emit("getGames", token);
+      socket.emit("getGames");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);

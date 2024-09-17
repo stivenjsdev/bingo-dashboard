@@ -25,12 +25,12 @@ const Header = ({ logoutButton = false }: HeaderProps) => {
               <img className="w-11" src={bingoLogo} alt="logo Bingo" />
               {logoutButton ? (
                 <Link to="/">
-                  <span className="ml-2 text-white text-lg sm:text-xl font-semibold">
+                  <span className="ml-2 text-white text-3xl sm:text-4xl font-normal font-protestGuerrilla">
                     Bin<span className="text-purple-300">Go</span>!
                   </span>
                 </Link>
               ) : (
-                <span className="ml-2 text-white text-lg sm:text-xl font-semibold">
+                <span className="ml-2 text-white text-3xl sm:text-4xl font-normal font-protestGuerrilla">
                   Bin<span className="text-purple-300">Go</span>!
                 </span>
               )}

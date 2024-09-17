@@ -136,7 +136,7 @@ const GameDetailPage = () => {
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <div className="px-4 py-5 sm:px-6 bg-indigo-600 text-white">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">{game.gameName}</h2>
+                <h2 className="text-2xl font-bold font-oswald">{game.gameName}</h2>
                 <span
                   className={`px-2 py-1 text-xs font-semibold rounded-full ${
                     game.active

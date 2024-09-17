@@ -113,7 +113,7 @@ const IndexPage = () => {
                       <div className="flex justify-between">
                         <div className="flex flex-col justify-between sm:gap-2">
                           <div className="mb-2 sm:mb-0">
-                            <h2 className="text-lg font-medium text-gray-900">
+                            <h2 className="text-lg font-medium text-gray-900 font-oswald">
                               {game.gameName}
                             </h2>
                             <p className="text-sm text-gray-500 flex items-center mt-1">

@@ -45,8 +45,6 @@ const GameDetailPage = () => {
         type: "SET_IS_SELECTED_GAME_LOADING",
         payload: { isSelectedGameLoading: true },
       });
-      // const token = localStorage.getItem("AUTH_TOKEN");
-      // socket.emit("get-game", token, id);
       socket.emit("getGame", id);
       socket.on("connect", () => {
         socket.emit("joinGame", id);
@@ -74,8 +72,6 @@ const GameDetailPage = () => {
   const handleCreatePlayer = (formData: NewPlayerForm) => {
     console.log("createPlayer", formData);
     const newPlayer = { ...formData, gameId: id };
-    // const token = localStorage.getItem("AUTH_TOKEN");
-    // socket.emit("createPlayer", token, newPlayer);
     socket.emit("createPlayer", newPlayer);
     reset();
     setShowAddPlayer(false);
@@ -83,22 +79,16 @@ const GameDetailPage = () => {
 
   const handleTakeOutNumber = () => {
     console.log("takeBallOut");
-    // const token = localStorage.getItem("AUTH_TOKEN");
-    // socket.emit("takeBallOut", token, id);
     socket.emit("takeBallOut", id);
   };
 
   const handleResetGame = () => {
     console.log("resetGame");
-    // const token = localStorage.getItem("AUTH_TOKEN");
-    // socket.emit("resetGame", token, id);
     socket.emit("resetGame", id);
   };
 
   const handleDeletePlayer = (playerId: string) => {
     console.log("delete-player");
-    // const token = localStorage.getItem("AUTH_TOKEN");
-    // socket.emit("deletePlayer", token, playerId, id);
     socket.emit("deletePlayer", playerId, id);
   };
 
@@ -119,8 +109,6 @@ const GameDetailPage = () => {
 
   const handleChangeCard = (playerId: string) => {
     console.log("changeCard");
-    // const token = localStorage.getItem("AUTH_TOKEN");
-    // socket.emit("changeCard", token, playerId, id);
     socket.emit("changeCard", playerId, id);
   };
 

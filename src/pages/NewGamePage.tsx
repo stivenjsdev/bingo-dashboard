@@ -1,8 +1,9 @@
 import { createGame } from "@/api/AuthAPI";
+import { DatePicker } from "@/components/DatePicker";
 import type { NewGameForm } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const NewGamePage = () => {
@@ -12,6 +13,7 @@ const NewGamePage = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<NewGameForm>();
 
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const NewGamePage = () => {
           className="mt-8 space-y-6"
           onSubmit={handleSubmit(handleCreateGame)}
         >
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="rounded-md shadow-sm space-y-1">
             <div>
               <label htmlFor="gameName" className="sr-only">
                 Nombre del Juego
@@ -51,7 +53,7 @@ const NewGamePage = () => {
                 id="gameName"
                 type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="appearance-none relative block w-full px-4 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-sm"
                 placeholder="Nombre del Juego"
                 {...register("gameName", { required: "Game Name is required" })}
               />
@@ -60,14 +62,20 @@ const NewGamePage = () => {
               <label htmlFor="date" className="sr-only">
                 Fecha del Juego
               </label>
-              <input
+              {/* <input
                 id="date"
                 type="date"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 {...register("date", { required: "Game Date is required" })}
               />
-              {/* <CalendarIcon className="absolute right-3 top-2 h-5 w-5 text-gray-400" /> */}
+              <CalendarIcon className="absolute right-3 top-2 h-5 w-5 text-gray-400" /> */}
+              <Controller
+                name="date"
+                control={control}
+                rules={{ required: "La fecha del Juego es requerida" }}
+                render={({ field }) => <DatePicker field={field} />}
+              />
             </div>
           </div>
 
@@ -77,9 +85,7 @@ const NewGamePage = () => {
             </div>
           )}
           {requestError && (
-            <div className="text-red-500 text-sm mt-2">
-              {requestError}
-            </div>
+            <div className="text-red-500 text-sm mt-2">{requestError}</div>
           )}
 
           <div>

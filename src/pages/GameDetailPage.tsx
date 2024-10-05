@@ -10,7 +10,7 @@ import TakeOutButton from "@/components/TakeOutButton";
 import { useGame } from "@/hooks/useGame";
 import { NewPlayerForm, Player } from "@/types/index";
 import { capitalizeWords, dateFormatter, getBingoLetter } from "@/utils/game";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -32,6 +32,8 @@ const GameDetailPage = () => {
   } = useGame();
 
   const [showAddPlayer, setShowAddPlayer] = useState(false);
+
+  const onlinePlayers = useMemo(() => game.players.filter(player => player.online).length, [game.players]);
 
   const {
     register,
@@ -117,7 +119,7 @@ const GameDetailPage = () => {
   const handleChangeGameType = (gameType: number) => {
     console.log("changeGameType", gameType);
     socket.emit("changeGameType", gameType, id);
-  }
+  };
 
   if (isLoading) {
     return (
@@ -215,12 +217,18 @@ const GameDetailPage = () => {
                 </div>
               </div>
               <ChangeGameTypeForm handleOnClick={handleChangeGameType} />
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Jugadores:{" "}
-                <span className="text-base text-gray-700">
-                  {game.players.length}
-                </span>
-              </h3>
+              <div className="flex flex-row justify-between items-center mb-4">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Jugadores:{" "}
+                  <span className="text-base text-gray-700 font-normal">
+                    {game.players.length}
+                  </span>
+                </h3>
+                <h3 className="mr-1">
+                  Online:{" "}
+                  <span className="text-base text-gray-700">{onlinePlayers}</span>
+                </h3>
+              </div>
               <ul className="divide-y divide-gray-200">
                 {game.players.map((player) => (
                   <li

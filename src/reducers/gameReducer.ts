@@ -67,8 +67,8 @@ export const initialState: GameState = {
     gameName: "",
     date: new Date(),
     players: [],
-    unsortedNumbers: [],
-    chosenNumbers: [],
+    balls: [],
+    drawnBalls: [],
     userAdmin: {
       _id: "",
       username: "",

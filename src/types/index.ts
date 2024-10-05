@@ -4,12 +4,20 @@ export type User = {
   email: string;
 };
 
+type BingoCard = {
+  B: number[];
+  I: number[];
+  N: number[];
+  G: number[];
+  O: number[];
+};
+
 export type Player = {
   _id: string;
   name: string;
   wpNumber: string;
   code: string;
-  bingoCard: number[][];
+  bingoCard: BingoCard;
   game: Game;
   active: boolean;
   online: boolean;
@@ -21,10 +29,11 @@ export type Player = {
 export type Game = {
   _id: string;
   gameName: string;
+  gameType: number;
   date: Date;
   players: Player[];
-  unsortedNumbers: number[];
-  chosenNumbers: number[];
+  balls: number[];
+  drawnBalls: number[];
   userAdmin: User;
   active: boolean;
   createdAt: Date;

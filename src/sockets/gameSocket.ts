@@ -33,6 +33,7 @@ export const gameSocket = (
   // listen for selected game event
   socket.on("game", (selectedGame: Game) => {
     console.log("game event");
+    console.log(selectedGame);
     dispatch({
       type: "SET_IS_SELECTED_GAME_LOADING",
       payload: { isSelectedGameLoading: false },
@@ -74,6 +75,7 @@ export const gameSocket = (
 
   // listen for game updated event
   socket.on("gameUpdate", (game: Game) => {
+    console.log("gameUpdate", game);
     if (!game) return;
     dispatch({ type: "SET_SELECTED_GAME", payload: { selectedGame: game } });
   });

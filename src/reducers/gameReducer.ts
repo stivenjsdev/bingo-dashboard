@@ -65,6 +65,7 @@ export const initialState: GameState = {
   selectedGame: {
     _id: "",
     gameName: "",
+    gameType: 0,
     date: new Date(),
     players: [],
     balls: [],
